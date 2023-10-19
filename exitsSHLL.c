@@ -2,39 +2,6 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
- * _strncpyfnc - Copies a string from source to destination.
- *
- * @dstnSh: The destination string for the copy operation.
- * @srccSh: The source string to be copied.
- * @nssh: The maximum number of characters to be copied.
- *
- * Return: Returns the concatenated string.
-*/
-
-char *_strncpyfnc(char *dstnSh, char *srccSh, int nssh)
-{
-	int ish, jsh;
-	char *sShll = dstnSh;
-
-	ish = 0;
-	while (srccSh[ish] != '\0' && ish < nssh - 1)
-	{
-		dstnSh[ish] = srccSh[ish];
-		ish++;
-	}
-	if (ish < nssh)
-	{
-		jsh = ish;
-		while (jsh < nssh)
-		{
-			dstnSh[jsh] = '\0';
-			jsh++;
-		}
-	}
-	return (sShll);
-}
-
-/**
  * _strncatfnc - Appends one string to another.
  *
  * @dstnSh: The first string.
@@ -46,11 +13,10 @@ char *_strncpyfnc(char *dstnSh, char *srccSh, int nssh)
 
 char *_strncatfnc(char *dstnSh, char *srccSh, int nssh)
 {
-	int ish, jsh;
-	char *sShll = dstnSh;
+	int ish = 0, jsh = 0;
+	char *sShll;
 
-	ish = 0;
-	jsh = 0;
+	sShll = dstnSh;
 	while (dstnSh[ish] != '\0')
 		ish++;
 	while (srccSh[jsh] != '\0' && jsh < nssh)
@@ -79,7 +45,38 @@ char *_strchrfnc(char *sShll, char cShll)
 		if (*sShll == cShll)
 			return (sShll);
 	} while (*sShll++ != '\0');
-
 	return (NULL);
 }
 
+/**
+ * _strncpyfnc - Copies a string from source to destination.
+ *
+ * @dstnSh: The destination string for the copy operation.
+ * @srccSh: The source string to be copied.
+ * @nssh: The maximum number of characters to be copied.
+ *
+ * Return: Returns the concatenated string.
+*/
+
+char *_strncpyfnc(char *dstnSh, char *srccSh, int nssh)
+{
+        int ish = 0, jsh;
+        char *sShll;
+
+	sShll = dstnSh;
+        while (srccSh[ish] != '\0' && ish < nssh - 1)
+        {
+                dstnSh[ish] = srccSh[ish];
+                ish++;
+        }
+        if (ish < nssh)
+        {
+                jsh = ish;
+                while (jsh < nssh)
+                {
+                        dstnSh[jsh] = '\0';
+                        jsh++;
+                }
+        }
+        return (sShll);
+}

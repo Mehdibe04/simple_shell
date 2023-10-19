@@ -2,34 +2,6 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
- * iintrctvSh - Determines if the shell is in interactive mode
- *
- * @infShll: Pointer to a struct containing shell information
- *
- * Return: 1 if the shell is in interactive mode, 0 otherwise
-*/
-
-int iintrctvSh(info_to_structShll *infShll)
-{
-	return (isatty(STDIN_FILENO) && infShll->read2fdShll <= 2);
-}
-
-/**
- * deliimfnc - Checks if a character is a delimiter
- * @cShll: The character to check
- * @deliimit: The delimiter string
- * Return: 1 if true, 0 if false
-*/
-
-int deliimfnc(char cShll, char *deliimit)
-{
-	while (*deliimit)
-		if (*deliimit++ == cShll)
-			return (1);
-	return (0);
-}
-
-/**
  *_isalphafnc - checks for alphabetic character
  *@cShll: The character to input
  *Return: 1 if cShll is alphabetic, 0 otherwise
@@ -44,6 +16,19 @@ int _isalphafnc(int cShll)
 }
 
 /**
+ * iintrctvSh - Determines if the shell is in interactive mode
+ *
+ * @infShll: Pointer to a struct containing shell information
+ *
+ * Return: 1 if the shell is in interactive mode, 0 otherwise
+*/
+
+int iintrctvSh(info_to_structShll *infShll)
+{
+        return (isatty(STDIN_FILENO) && infShll->read2fdShll <= 2);
+}
+
+/**
  *_atoifnc - converts a string to an integer
  *@sShll: the string to be converted
  *Return: 0 if no numbers in string, converted number otherwise
@@ -51,10 +36,13 @@ int _isalphafnc(int cShll)
 
 int _atoifnc(char *sShll)
 {
-	int ish, sgnShll = 1, flgSh = 0, oputShll;
-	unsigned int resltShll = 0;
+	int ish = 0, sgnShll, flgSh, oputShll;
+	unsigned int resltShll;
 
-	for (ish = 0;  sShll[ish] != '\0' && flgSh != 2; ish++)
+	sgnShll = 1;
+	flgSh = 0;
+	resltShll = 0;
+	for (;  sShll[ish] != '\0' && flgSh != 2; ish++)
 	{
 		if (sShll[ish] == '-')
 			sgnShll *= -1;
@@ -75,4 +63,19 @@ int _atoifnc(char *sShll)
 		oputShll = resltShll;
 
 	return (oputShll);
+}
+
+/**
+ * deliimfnc - Checks if a character is a delimiter
+ * @cShll: The character to check
+ * @deliimit: The delimiter string
+ * Return: 1 if true, 0 if false
+*/
+
+int deliimfnc(char cShll, char *deliimit)
+{
+        while (*deliimit)
+                if (*deliimit++ == cShll)
+                        return (1);
+        return (0);
 }

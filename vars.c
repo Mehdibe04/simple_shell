@@ -2,75 +2,18 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
- * iisChaiinSh - checks for buffers
- * @infShll: param structure
- * @bufferSh: buff
- * @pSh: @ of the pos in the buffSh
+ * replace_string_fnc_shll - str changing
+ * @olddSh: @ old str
+ * @newSh: str input
  *
  * Return: 1 (Success), 0 (Failure)
 */
 
-int iisChaiinSh(info_to_structShll *infShll, char *bufferSh, size_t *pSh)
+int replace_string_fnc_shll(char **olddSh, char *newSh)
 {
-	size_t jsh = *pSh;
-
-	if (bufferSh[jsh] == '|' && bufferSh[jsh + 1] == '|')
-	{
-		bufferSh[jsh] = 0;
-		jsh++;
-		infShll->cmd_buff_typeShell = CMD_OR_CHAINING;
-	}
-	else if (bufferSh[jsh] == '&' && bufferSh[jsh + 1] == '&')
-	{
-		bufferSh[jsh] = 0;
-		jsh++;
-		infShll->cmd_buff_typeShell = CMD_AND_CHAINING;
-	}
-	else if (bufferSh[jsh] == ';')
-	{
-		bufferSh[jsh] = 0;
-		infShll->cmd_buff_typeShell = CMD_CHAIN_CHAINING;
-	}
-	else
-		return (0);
-	*pSh = jsh;
-	return (1);
-}
-
-/**
- * check_chain_fnc_shll - checks if chaining need to be continued
- * @infShll: the structure of the param
- * @bufferSh: buff's char
- * @pSh: @ of the pos in bufferSh
- * @ish: beginning pos in the bufferSh
- * @lnShll: bufferSh memo space
- *
- * Return: Nothing
-*/
-
-void check_chain_fnc_shll(info_to_structShll *infShll
-		, char *bufferSh, size_t *pSh, size_t ish, size_t lnShll)
-{
-	size_t jsh = *pSh;
-
-	if (infShll->cmd_buff_typeShell == CMD_AND_CHAINING)
-	{
-		if (infShll->statuusShll)
-		{
-			bufferSh[ish] = 0;
-			jsh = lnShll;
-		}
-	}
-	if (infShll->cmd_buff_typeShell == CMD_OR_CHAINING)
-	{
-		if (!infShll->statuusShll)
-		{
-			bufferSh[ish] = 0;
-			jsh = lnShll;
-		}
-	}
-
-	*pSh = jsh;
+        free(*olddSh);
+        *olddSh = newSh;
+        return (1);
 }
 
 /**
@@ -82,11 +25,11 @@ void check_chain_fnc_shll(info_to_structShll *infShll
 
 int replace_alias_fnc_shll(info_to_structShll *infShll)
 {
-	int ish;
+	int ish = 0;
 	list_tShll *nodeeShll;
 	char *pSh;
 
-	for (ish = 0; ish < 10; ish++)
+	for (; ish < 10; ish++)
 	{
 		nodeeShll = nodstartssSh(infShll->aliiasShell, infShll->argv[0], '=');
 		if (!nodeeShll)
@@ -104,6 +47,42 @@ int replace_alias_fnc_shll(info_to_structShll *infShll)
 }
 
 /**
+ * check_chain_fnc_shll - checks if chaining need to be continued
+ * @infShll: the structure of the param
+ * @bufferSh: buff's char
+ * @pSh: @ of the pos in bufferSh
+ * @ish: beginning pos in the bufferSh
+ * @lnShll: bufferSh memo space
+ *
+ * Return: Nothing
+*/
+
+void check_chain_fnc_shll(info_to_structShll *infShll
+                , char *bufferSh, size_t *pSh, size_t ish, size_t lnShll)
+{
+        size_t jsh;
+
+	jsh = *pSh;
+        if (infShll->cmd_buff_typeShell == CMD_AND_CHAINING)
+        {
+                if (infShll->statuusShll)
+                {
+                        bufferSh[ish] = 0;
+                        jsh = lnShll;
+                }
+        }
+        if (infShll->cmd_buff_typeShell == CMD_OR_CHAINING)
+        {
+                if (!infShll->statuusShll)
+                {
+                        bufferSh[ish] = 0;
+                        jsh = lnShll;
+		}
+        }
+        *pSh = jsh;
+}
+
+/**
  * replace_vars_fnc_shll - vars changing in d tokenized_str
  * @infShll: a structured param
  *
@@ -115,7 +94,7 @@ int replace_vars_fnc_shll(info_to_structShll *infShll)
 	int ish = 0;
 	list_tShll *nodeeShll;
 
-	for (ish = 0; infShll->argv[ish]; ish++)
+	for (; infShll->argv[ish]; ish++)
 	{
 		if (infShll->argv[ish][0] != '$' || !infShll->argv[ish][1])
 			continue;
@@ -146,17 +125,38 @@ int replace_vars_fnc_shll(info_to_structShll *infShll)
 }
 
 /**
- * replace_string_fnc_shll - str changing
- * @olddSh: @ old str
- * @newSh: str input
+ * iisChaiinSh - checks for buffers
+ * @infShll: param structure
+ * @bufferSh: buff
+ * @pSh: @ of the pos in the buffSh
  *
  * Return: 1 (Success), 0 (Failure)
 */
 
-int replace_string_fnc_shll(char **olddSh, char *newSh)
+int iisChaiinSh(info_to_structShll *infShll, char *bufferSh, size_t *pSh)
 {
-	free(*olddSh);
-	*olddSh = newSh;
-	return (1);
-}
+        size_t jsh;
 
+	jsh = *pSh;
+        if (bufferSh[jsh] == '|' && bufferSh[jsh + 1] == '|')
+        {
+                bufferSh[jsh] = 0;
+                jsh++;
+                infShll->cmd_buff_typeShell = CMD_OR_CHAINING;
+        }
+        else if (bufferSh[jsh] == '&' && bufferSh[jsh + 1] == '&')
+        {
+                bufferSh[jsh] = 0;
+                jsh++;
+                infShll->cmd_buff_typeShell = CMD_AND_CHAINING;
+        }
+        else if (bufferSh[jsh] == ';')
+        {
+                bufferSh[jsh] = 0;
+                infShll->cmd_buff_typeShell = CMD_CHAIN_CHAINING;
+        }
+        else
+                return (0);
+        *pSh = jsh;
+        return (1);
+}

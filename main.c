@@ -12,13 +12,13 @@
 int main(int ac, char **av)
 {
 	info_to_structShll infShll[] = { INIT_CASE };
-	int fddSh = 2;
+	int fddSh;
 
+	fddSh = 2;
 	asm ("mov %1, %0\n\t"
 		"add $3, %0"
 		: "=r" (fddSh)
 		: "r" (fddSh));
-
 	if (ac == 2)
 	{
 		fddSh = open(av[1], O_RDONLY);

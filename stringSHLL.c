@@ -2,22 +2,40 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
- * _strlenfnc - gets number of char contained in a str
- * @sShll: str input
+ * startsSh_witthfnc - checks if hyShStk is in the beginning of needlleeSh
+ * @hayShStak: str input
+ * @needlleeSh: src input
  *
- * Return: number of chars
+ * Return: nxt char's @ of str input
 */
 
-int _strlenfnc(char *sShll)
+char *startsSh_witthfnc(const char *hayShStak, const char *needlleeSh)
 {
-	int ish = 0;
+        while (*needlleeSh)
+                if (*needlleeSh++ != *hayShStak++)
+                        return (NULL);
+        return ((char *)hayShStak);
+}
 
-	if (!sShll)
-		return (0);
+/**
+ * _strcatfnc - 2 str concatenatg
+ * @dstnSh: dest's buff
+ * @srccSh: src's buff
+ *
+ * Return: ptr 2 dest's buff
+*/
 
-	while (*sShll++)
-		ish++;
-	return (ish);
+char *_strcatfnc(char *dstnSh, char *srccSh)
+{
+        char *rettSh;
+
+	rettSh = dstnSh;
+        while (*dstnSh)
+                dstnSh++;
+        while (*srccSh)
+                *dstnSh++ = *srccSh++;
+        *dstnSh = *srccSh;
+        return (rettSh);
 }
 
 /**
@@ -44,38 +62,21 @@ int _strcmpfnc(char *strSh_1, char *strSh_2)
 }
 
 /**
- * startsSh_witthfnc - checks if hyShStk is in the beginning of needlleeSh
- * @hayShStak: str input
- * @needlleeSh: src input
+ * _strlenfnc - gets number of char contained in a str
+ * @sShll: str input
  *
- * Return: nxt char's @ of str input
+ * Return: number of chars
 */
 
-char *startsSh_witthfnc(const char *hayShStak, const char *needlleeSh)
+int _strlenfnc(char *sShll)
 {
-	while (*needlleeSh)
-		if (*needlleeSh++ != *hayShStak++)
-			return (NULL);
-	return ((char *)hayShStak);
+        int ish;
+
+	ish = 0;
+        if (!sShll)
+                return (0);
+
+        while (*sShll++)
+                ish++;
+        return (ish);
 }
-
-/**
- * _strcatfnc - 2 str concatenatg
- * @dstnSh: dest's buff
- * @srccSh: src's buff
- *
- * Return: ptr 2 dest's buff
-*/
-
-char *_strcatfnc(char *dstnSh, char *srccSh)
-{
-	char *rettSh = dstnSh;
-
-	while (*dstnSh)
-		dstnSh++;
-	while (*srccSh)
-		*dstnSh++ = *srccSh++;
-	*dstnSh = *srccSh;
-	return (rettSh);
-}
-

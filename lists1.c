@@ -2,6 +2,54 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
+ * nodstartssSh - a nodeeShll whose str starting with a prfx to be returned
+ * @nodeeShll: ptr to a list of heedSh
+ * @prfxSh: str to be matched
+ * @cShll: aftr prfx that should be matched
+ *
+ * Return: nodeeShll, 0 Otherwise
+*/
+
+list_tShll *nodstartssSh(list_tShll *nodeeShll, char *prfxSh, char cShll)
+{
+        char *pSh = NULL;
+
+        while (nodeeShll)
+        {
+                pSh = startsSh_witthfnc(nodeeShll->stringShll, prfxSh);
+                if (pSh && ((cShll == -1) || (*pSh == cShll)))
+                        return (nodeeShll);
+                nodeeShll = nodeeShll->nextShll;
+        }
+        return (NULL);
+}
+
+/**
+ * priintSh_liistSh - shows all the elmts of a lst_tShll lnkd lst
+ * @hShll: ptr 2 1st nodeeShll
+ *
+ * Return: sz of the lst
+*/
+
+size_t priintSh_liistSh(const list_tShll *hShll)
+{
+        size_t ish;
+
+	ish = 0;
+        while (hShll)
+        {
+                _putsfnc(convrt_numbfnc(hShll->numShll, 10, 0));
+                _putcharfnc(':');
+                _putcharfnc(' ');
+                _putsfnc(hShll->stringShll ? hShll->stringShll : "(nil)");
+                _putsfnc("\n");
+                hShll = hShll->nextShll;
+                ish++;
+        }
+        return (ish);
+}
+
+/**
  * list_len_fnc - indicates the  length of the lnkd_lst
  * @hShll: ptr 2 first nodeeShll
  *
@@ -9,14 +57,38 @@
  */
 size_t list_len_fnc(const list_tShll *hShll)
 {
-	size_t ish = 0;
+	size_t ish;
 
+	ish = 0;
 	while (hShll)
 	{
 		hShll = hShll->nextShll;
 		ish++;
 	}
 	return (ish);
+}
+
+/**
+ * nod_iindexSh - it returns the idx of a nodeeShll
+ * @heedSh: ptr to a heedSh lst
+ * @nodeeShll: pointer to the nodeeShll
+ *
+ * Return: idx of nodeeShll, -1 Otherwise
+*/
+
+ssize_t nod_iindexSh(list_tShll *heedSh, list_tShll *nodeeShll)
+{
+        size_t ish;
+
+	ish = 0;
+        while (heedSh)
+        {
+                if (heedSh == nodeeShll)
+                        return (ish);
+                heedSh = heedSh->nextShll;
+                ish++;
+        }
+        return (-1);
 }
 
 /**
@@ -28,11 +100,13 @@ size_t list_len_fnc(const list_tShll *hShll)
 
 char **list_tShllo_strings_SHLL_fnc(list_tShll *heedSh)
 {
-	list_tShll *nodeeShll = heedSh;
-	size_t ish = list_len_fnc(heedSh), jsh;
+	list_tShll *nodeeShll;
+	size_t ish, jsh;
 	char **strsShll;
 	char *strShll;
 
+	nodeeShll = heedSh;
+	ish = list_len_fnc(heedSh);
 	if (!heedSh || !ish)
 		return (NULL);
 	strsShll = malloc(sizeof(char *) * (ish + 1));
@@ -55,74 +129,3 @@ char **list_tShllo_strings_SHLL_fnc(list_tShll *heedSh)
 	strsShll[ish] = NULL;
 	return (strsShll);
 }
-
-
-/**
- * priintSh_liistSh - shows all the elmts of a lst_tShll lnkd lst
- * @hShll: ptr 2 1st nodeeShll
- *
- * Return: sz of the lst
-*/
-
-size_t priintSh_liistSh(const list_tShll *hShll)
-{
-	size_t ish = 0;
-
-	while (hShll)
-	{
-		_putsfnc(convrt_numbfnc(hShll->numShll, 10, 0));
-		_putcharfnc(':');
-		_putcharfnc(' ');
-		_putsfnc(hShll->stringShll ? hShll->stringShll : "(nil)");
-		_putsfnc("\n");
-		hShll = hShll->nextShll;
-		ish++;
-	}
-	return (ish);
-}
-
-/**
- * nodstartssSh - a nodeeShll whose str starting with a prfx to be returned
- * @nodeeShll: ptr to a list of heedSh
- * @prfxSh: str to be matched
- * @cShll: aftr prfx that should be matched
- *
- * Return: nodeeShll, 0 Otherwise
-*/
-
-list_tShll *nodstartssSh(list_tShll *nodeeShll, char *prfxSh, char cShll)
-{
-	char *pSh = NULL;
-
-	while (nodeeShll)
-	{
-		pSh = startsSh_witthfnc(nodeeShll->stringShll, prfxSh);
-		if (pSh && ((cShll == -1) || (*pSh == cShll)))
-			return (nodeeShll);
-		nodeeShll = nodeeShll->nextShll;
-	}
-	return (NULL);
-}
-
-/**
- * nod_iindexSh - it returns the idx of a nodeeShll
- * @heedSh: ptr to a heedSh lst
- * @nodeeShll: pointer to the nodeeShll
- *
- * Return: idx of nodeeShll, -1 Otherwise
-*/
-
-ssize_t nod_iindexSh(list_tShll *heedSh, list_tShll *nodeeShll)
-{
-	size_t ish = 0;
-
-	while (heedSh)
-	{
-		if (heedSh == nodeeShll)
-			return (ish);
-		heedSh = heedSh->nextShll;
-		ish++;
-	}
-	return (-1);
-}
-

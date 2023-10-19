@@ -2,6 +2,48 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
+ * deleteSh_nodat_indxfnc - nodeeShll at a certain idxSh to be dlted
+ * @heedSh: @ of the  ptr to the 1st nodeeShll
+ * @indxSh: indxSh of nodeeShll to be dlted
+ *
+ * Return: 1 (Success), 0 Otherwise
+*/
+
+int deleteSh_nodat_indxfnc(list_tShll **heedSh, unsigned int indxSh)
+{
+        list_tShll *nodeeShll, *prv_noodSh;
+        unsigned int ish;
+
+	ish = 0;
+        if (!heedSh || !*heedSh)
+                return (0);
+
+        if (!indxSh)
+        {
+                nodeeShll = *heedSh;
+                *heedSh = (*heedSh)->nextShll;
+                free(nodeeShll->stringShll);
+                free(nodeeShll);
+                return (1);
+        }
+        nodeeShll = *heedSh;
+        while (nodeeShll)
+        {
+                if (ish == indxSh)
+                {
+                        prv_noodSh->nextShll = nodeeShll->nextShll;
+                        free(nodeeShll->stringShll);
+                        free(nodeeShll);
+                        return (1);
+                }
+                ish++;
+                prv_noodSh = nodeeShll;
+                nodeeShll = nodeeShll->nextShll;
+        }
+        return (0);
+}
+
+/**
  * addiingnodSh - nodeeShll to d beginning of d lst to be added
  * @heedSh: @ of ptr to the start of the nodeeShll
  * @strShll: fld of a nodeeShll
@@ -36,6 +78,28 @@ list_tShll *addiingnodSh(list_tShll **heedSh, const char *strShll, int numbSh)
 }
 
 /**
+ * priintSh_lststr - Shows d strShll elmt of the lst
+ * @hShll: ptr to 1st nodeeShll
+ *
+ * Return: sz of the lst
+*/
+
+size_t priintSh_lststr(const list_tShll *hShll)
+{
+        size_t ish;
+
+	ish = 0;
+        while (hShll)
+        {
+                _putsfnc(hShll->stringShll ? hShll->stringShll : "(nil)");
+                _putsfnc("\n");
+                hShll = hShll->nextShll;
+                ish++;
+        }
+        return (ish);
+}
+
+/**
  * addiingnodSh_end - nodeeShll to d enth of d lst to be added
  * @heedSh: @ of ptr to the beginning of the nodeeShll
  * @strShll: fld of the nodeeShll
@@ -51,7 +115,6 @@ list_tShll *addiingnodSh_end(list_tShll **heedSh,
 
 	if (!heedSh)
 		return (NULL);
-
 	nodeeShll = *heedSh;
 	newSh_noodee = malloc(sizeof(list_tShll));
 	if (!newSh_noodee)
@@ -79,87 +142,26 @@ list_tShll *addiingnodSh_end(list_tShll **heedSh,
 }
 
 /**
- * priintSh_lststr - Shows d strShll elmt of the lst
- * @hShll: ptr to 1st nodeeShll
- *
- * Return: sz of the lst
-*/
-
-size_t priintSh_lststr(const list_tShll *hShll)
-{
-	size_t ish = 0;
-
-	while (hShll)
-	{
-		_putsfnc(hShll->stringShll ? hShll->stringShll : "(nil)");
-		_putsfnc("\n");
-		hShll = hShll->nextShll;
-		ish++;
-	}
-	return (ish);
-}
-
-/**
- * deleteSh_nodat_indxfnc - nodeeShll at a certain idxSh to be dlted
- * @heedSh: @ of the  ptr to the 1st nodeeShll
- * @indxSh: indxSh of nodeeShll to be dlted
- *
- * Return: 1 (Success), 0 Otherwise
- */
-int deleteSh_nodat_indxfnc(list_tShll **heedSh, unsigned int indxSh)
-{
-	list_tShll *nodeeShll, *prv_noodSh;
-	unsigned int ish = 0;
-
-	if (!heedSh || !*heedSh)
-		return (0);
-
-	if (!indxSh)
-	{
-		nodeeShll = *heedSh;
-		*heedSh = (*heedSh)->nextShll;
-		free(nodeeShll->stringShll);
-		free(nodeeShll);
-		return (1);
-	}
-	nodeeShll = *heedSh;
-	while (nodeeShll)
-	{
-		if (ish == indxSh)
-		{
-			prv_noodSh->nextShll = nodeeShll->nextShll;
-			free(nodeeShll->stringShll);
-			free(nodeeShll);
-			return (1);
-		}
-		ish++;
-		prv_noodSh = nodeeShll;
-		nodeeShll = nodeeShll->nextShll;
-	}
-	return (0);
-}
-
-/**
  * free_listfnc - all nodeeShll nodes to be freed
  * @headSh_pointer: @ of the ptr to the 1st node of  nodeeShll
  *
  * Return: Nothing
- */
+*/
+
 void free_listfnc(list_tShll **headSh_pointer)
 {
-	list_tShll *nodeeShll, *nxt_noodSh, *heedSh;
+        list_tShll *nodeeShll, *nxt_noodSh, *heedSh;
 
-	if (!headSh_pointer || !*headSh_pointer)
-		return;
-	heedSh = *headSh_pointer;
-	nodeeShll = heedSh;
-	while (nodeeShll)
-	{
-		nxt_noodSh = nodeeShll->nextShll;
-		free(nodeeShll->stringShll);
-		free(nodeeShll);
-		nodeeShll = nxt_noodSh;
-	}
-	*headSh_pointer = NULL;
+        if (!headSh_pointer || !*headSh_pointer)
+                return;
+        heedSh = *headSh_pointer;
+        nodeeShll = heedSh;
+        while (nodeeShll)
+        {
+                nxt_noodSh = nodeeShll->nextShll;
+                free(nodeeShll->stringShll);
+                free(nodeeShll);
+                nodeeShll = nxt_noodSh;
+        }
+        *headSh_pointer = NULL;
 }
-

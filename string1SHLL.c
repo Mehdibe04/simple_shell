@@ -2,50 +2,25 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
- * _strcpyfnc - the function cpy a string
- * @dstnSh: dest
- * @srccSh: src
+ * _putcharfnc - outputs d char cShll the standard num 1
+ * @cShll: d char 2 be prnted
  *
- * Return: ptr to dest
+ * Return: 1 (Success), -1 (Failure).
 */
 
-char *_strcpyfnc(char *dstnSh, char *srccSh)
+int _putcharfnc(char cShll)
 {
-	int ish = 0;
+        static int ish;
+        static char bufferSh[WRITE_BUFFER_SIZE];
 
-	if (dstnSh == srccSh || srccSh == 0)
-		return (dstnSh);
-	while (srccSh[ish])
-	{
-		dstnSh[ish] = srccSh[ish];
-		ish++;
-	}
-	dstnSh[ish] = 0;
-	return (dstnSh);
-}
-
-/**
- * _strdupfnc - it dup the str
- * @strShll: d str to be dupted
- *
- * Return: ptr to d dup str
-*/
-
-char *_strdupfnc(const char *strShll)
-{
-	int lenSh_gthll = 0;
-	char *rettSh;
-
-	if (strShll == NULL)
-		return (NULL);
-	while (*strShll++)
-		lenSh_gthll++;
-	rettSh = malloc(sizeof(char) * (lenSh_gthll + 1));
-	if (!rettSh)
-		return (NULL);
-	for (lenSh_gthll++; lenSh_gthll--;)
-		rettSh[lenSh_gthll] = *--strShll;
-	return (rettSh);
+        if (cShll == BUFFER_FLSH || ish >= WRITE_BUFFER_SIZE)
+        {
+                write(1, bufferSh, ish);
+                ish = 0;
+        }
+        if (cShll != BUFFER_FLSH)
+                bufferSh[ish++] = cShll;
+        return (1);
 }
 
 /**
@@ -57,8 +32,9 @@ char *_strdupfnc(const char *strShll)
 
 void _putsfnc(char *strShll)
 {
-	int ish = 0;
+	int ish;
 
+	ish = 0;
 	if (!strShll)
 		return;
 	while (strShll[ish] != '\0')
@@ -69,24 +45,50 @@ void _putsfnc(char *strShll)
 }
 
 /**
- * _putcharfnc - outputs d char cShll the standard num 1
- * @cShll: d char 2 be prnted
+ * _strcpyfnc - the function cpy a string
+ * @dstnSh: dest
+ * @srccSh: src
  *
- * Return: 1 (Success), -1 (Failure).
+ * Return: ptr to dest
 */
 
-int _putcharfnc(char cShll)
+char *_strcpyfnc(char *dstnSh, char *srccSh)
 {
-	static int ish;
-	static char bufferSh[WRITE_BUFFER_SIZE];
+        int ish;
 
-	if (cShll == BUFFER_FLSH || ish >= WRITE_BUFFER_SIZE)
-	{
-		write(1, bufferSh, ish);
-		ish = 0;
-	}
-	if (cShll != BUFFER_FLSH)
-		bufferSh[ish++] = cShll;
-	return (1);
+	ish = 0;
+        if (dstnSh == srccSh || srccSh == 0)
+                return (dstnSh);
+        while (srccSh[ish])
+        {
+                dstnSh[ish] = srccSh[ish];
+                ish++;
+        }
+        dstnSh[ish] = 0;
+        return (dstnSh);
 }
 
+/**
+ * _strdupfnc - it dup the str
+ * @strShll: d str to be dupted
+ *
+ * Return: ptr to d dup str
+*/
+
+char *_strdupfnc(const char *strShll)
+{
+        int lenSh_gthll;
+        char *rettSh;
+
+	lenSh_gthll = 0;
+        if (strShll == NULL)
+                return (NULL);
+        while (*strShll++)
+                lenSh_gthll++;
+        rettSh = malloc(sizeof(char) * (lenSh_gthll + 1));
+        if (!rettSh)
+                return (NULL);
+        for (lenSh_gthll++; lenSh_gthll--;)
+                rettSh[lenSh_gthll] = *--strShll;
+        return (rettSh);
+}

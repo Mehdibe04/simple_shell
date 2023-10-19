@@ -2,29 +2,6 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
- * isSh_comandfnc - checks if the file is an exe cmd
- * @infShll: the infShll structure
- * @pthShll: paath 2 d f
- *
- * Return: 1 (Success), 0 (Failure)
-*/
-
-int isSh_comandfnc(info_to_structShll *infShll, char *pthShll)
-{
-	struct stat st;
-
-	(void)infShll;
-	if (!pthShll || stat(pthShll, &st))
-		return (0);
-
-	if (st.st_mode & S_IFREG)
-	{
-		return (1);
-	}
-	return (0);
-}
-
-/**
  * duplicateSh_charssfnc - dup chars
  * @pathstr: str's path
  * @starttShll: idxSh to the starting node
@@ -36,13 +13,37 @@ int isSh_comandfnc(info_to_structShll *infShll, char *pthShll)
 char *duplicateSh_charssfnc(char *pathstr, int starttShll, int sttpShll)
 {
 	static char bufferSh[1024];
-	int ish = 0, ksShll = 0;
+	int ish, ksShll;
 
+	ish = 0;
 	for (ksShll = 0, ish = starttShll; ish < sttpShll; ish++)
 		if (pathstr[ish] != ':')
 			bufferSh[ksShll++] = pathstr[ish];
 	bufferSh[ksShll] = 0;
 	return (bufferSh);
+}
+
+/**
+ * isSh_comandfnc - checks if the file is an exe cmd
+ * @infShll: the infShll structure
+ * @pthShll: paath 2 d f
+ *
+ * Return: 1 (Success), 0 (Failure)
+*/
+
+int isSh_comandfnc(info_to_structShll *infShll, char *pthShll)
+{
+        struct stat st;
+
+        (void)infShll;
+        if (!pthShll || stat(pthShll, &st))
+                return (0);
+
+        if (st.st_mode & S_IFREG)
+        {
+                return (1);
+        }
+        return (0);
 }
 
 /**
@@ -57,9 +58,11 @@ char *duplicateSh_charssfnc(char *pathstr, int starttShll, int sttpShll)
 char *findiingSh_patthfnc(info_to_structShll *infShll
 		, char *pathstr, char *cmmdSh)
 {
-	int ish = 0, currPositSh = 0;
+	int ish, currPositSh;
 	char *pthShll;
 
+	ish = 0;
+	currPositSh = 0;
 	if (!pathstr)
 		return (NULL);
 	if ((_strlenfnc(cmmdSh) > 2) && startsSh_witthfnc(cmmdSh, "./"))

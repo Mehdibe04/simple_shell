@@ -2,38 +2,6 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
- * _myexitfnc - Concludes the shell operation.
- *
- * @infShll: A structured collection of potential arguments,
- * ensuring a consistent function prototype.
- *
- * Return: Exits with a specified exit status (0)
- * when `infShll.argv[0]` is not "exit."
-*/
-
-int _myexitfnc(info_to_structShll *infShll)
-{
-	int exiit_chckSh;
-
-	if (infShll->argv[1])
-	{
-		exiit_chckSh = _erratoifnc(infShll->argv[1]);
-		if (exiit_chckSh == -1)
-		{
-			infShll->statuusShll = 2;
-			priintSh_errrfnc(infShll, "Illegal number: ");
-			_eputsfnc(infShll->argv[1]);
-			_eputcharfnc('\n');
-			return (1);
-		}
-		infShll->errr_numbShll = _erratoifnc(infShll->argv[1]);
-		return (-2);
-	}
-	infShll->errr_numbShll = -1;
-	return (-2);
-}
-
-/**
  * _mycdfnc - Adjusts the current directory of the process.
  *
  * @infShll: A structured set of potential arguments,
@@ -54,7 +22,7 @@ int _mycdfnc(info_to_structShll *infShll)
 	{
 		dirrSh = _getenvfnc(infShll, "HOME=");
 		if (!dirrSh)
-			chdirSh_reett = /* TODO: what should this be? */
+			chdirSh_reett =
 				chdir((dirrSh = _getenvfnc(infShll, "PWD=")) ? dirrSh : "/");
 		else
 			chdirSh_reett = chdir(dirrSh);
@@ -97,12 +65,42 @@ int _mycdfnc(info_to_structShll *infShll)
 
 int _myhelpfnc(info_to_structShll *infShll)
 {
-	char **argSh_arr;
+	char **argSh_arr = infShll->argv;
 
-	argSh_arr = infShll->argv;
 	_putsfnc("help call works. Function not yet implemented \n");
 	if (0)
-		_putsfnc(*argSh_arr); /* temp att_unused workaround */
+		_putsfnc(*argSh_arr);
 	return (0);
 }
 
+/**
+ * _myexitfnc - Concludes the shell operation.
+ *
+ * @infShll: A structured collection of potential arguments,
+ * ensuring a consistent function prototype.
+ *
+ * Return: Exits with a specified exit status (0)
+ * when `infShll.argv[0]` is not "exit."
+*/
+
+int _myexitfnc(info_to_structShll *infShll)
+{
+        int exiit_chckSh;
+
+        if (infShll->argv[1])
+        {
+                exiit_chckSh = _erratoifnc(infShll->argv[1]);
+                if (exiit_chckSh == -1)
+                {
+                        infShll->statuusShll = 2;
+                        priintSh_errrfnc(infShll, "Illegal number: ");
+                        _eputsfnc(infShll->argv[1]);
+                        _eputcharfnc('\n');
+                        return (1);
+                }
+                infShll->errr_numbShll = _erratoifnc(infShll->argv[1]);
+                return (-2);
+        }
+        infShll->errr_numbShll = -1;
+        return (-2);
+}

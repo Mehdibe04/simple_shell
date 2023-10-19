@@ -2,19 +2,29 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
- * _myhistoryfnc - Presents the command history,
- * displaying each command with line numbers starting from 0.
+ * print_alias - Outputs the content of an alias string.
  *
- * @infShll: A structured collection of potential arguments,
- * ensuring a consistent function prototype.
+ * @nodeeShll: The alias content to be displayed.
  *
- * Return: Always results in 0.
+ * Return: Always returns 0 upon successful execution,
+ * or 1 in case of an error.
 */
 
-int _myhistoryfnc(info_to_structShll *infShll)
+int print_alias(list_tShll *nodeeShll)
 {
-	priintSh_liistSh(infShll->histShll);
-	return (0);
+        char *pSh = NULL, *aaSh = NULL;
+
+        if (nodeeShll)
+        {
+                pSh = _strchrfnc(nodeeShll->stringShll, '=');
+                for (aaSh = nodeeShll->stringShll; aaSh <= pSh; aaSh++)
+                        _putcharfnc(*aaSh);
+                _putcharfnc('\'');
+                _putsfnc(pSh + 1);
+                _putsfnc("'\n");
+                return (0);
+        }
+        return (1);
 }
 
 /**
@@ -28,10 +38,9 @@ int _myhistoryfnc(info_to_structShll *infShll)
 
 int unset_alias(info_to_structShll *infShll, char *strShll)
 {
-	char *pSh, cShll;
+	char *pSh = _strchrfnc(strShll, '='), cShll;
 	int rettSh;
 
-	pSh = _strchrfnc(strShll, '=');
 	if (!pSh)
 		return (1);
 	cShll = *pSh;
@@ -55,42 +64,14 @@ int unset_alias(info_to_structShll *infShll, char *strShll)
 
 int set_alias(info_to_structShll *infShll, char *strShll)
 {
-	char *pSh;
+	char *pSh = _strchrfnc(strShll, '=');
 
-	pSh = _strchrfnc(strShll, '=');
 	if (!pSh)
 		return (1);
 	if (!*++pSh)
 		return (unset_alias(infShll, strShll));
-
 	unset_alias(infShll, strShll);
 	return (addiingnodSh_end(&(infShll->aliiasShell), strShll, 0) == NULL);
-}
-
-/**
- * print_alias - Outputs the content of an alias string.
- *
- * @nodeeShll: The alias content to be displayed.
- *
- * Return: Always returns 0 upon successful execution,
- * or 1 in case of an error.
-*/
-
-int print_alias(list_tShll *nodeeShll)
-{
-	char *pSh = NULL, *aaSh = NULL;
-
-	if (nodeeShll)
-	{
-		pSh = _strchrfnc(nodeeShll->stringShll, '=');
-		for (aaSh = nodeeShll->stringShll; aaSh <= pSh; aaSh++)
-			_putcharfnc(*aaSh);
-		_putcharfnc('\'');
-		_putsfnc(pSh + 1);
-		_putsfnc("'\n");
-		return (0);
-	}
-	return (1);
 }
 
 /**
@@ -105,10 +86,11 @@ int print_alias(list_tShll *nodeeShll)
 
 int _myaliasfnc(info_to_structShll *infShll)
 {
-	int ish = 0;
+	int ish;
 	char *pSh = NULL;
 	list_tShll *nodeeShll = NULL;
 
+	ish = 0;
 	if (infShll->argc == 1)
 	{
 		nodeeShll = infShll->aliiasShell;
@@ -127,6 +109,21 @@ int _myaliasfnc(info_to_structShll *infShll)
 		else
 			print_alias(nodstartssSh(infShll->aliiasShell, infShll->argv[ish], '='));
 	}
-
 	return (0);
+}
+
+/**
+ * _myhistoryfnc - Presents the command history,
+ * displaying each command with line numbers starting from 0.
+ *
+ * @infShll: A structured collection of potential arguments,
+ * ensuring a consistent function prototype.
+ *
+ * Return: Always results in 0.
+*/
+
+int _myhistoryfnc(info_to_structShll *infShll)
+{
+        priintSh_liistSh(infShll->histShll);
+        return (0);
 }

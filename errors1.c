@@ -2,6 +2,26 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
+ * removeeSh_cmmtsfnc - Replaces the first occurrence of '#' with '\0' in a string.
+ *
+ * @bufferSh: The string to be modified.
+ *
+ * Return: Always returns 0.
+*/
+
+void removeeSh_cmmtsfnc(char *bufferSh)
+{
+        int ish = 0;
+
+        for (; bufferSh[ish] != '\0'; ish++)
+                if (bufferSh[ish] == '#' && (!ish || bufferSh[ish - 1] == ' '))
+                {
+                        bufferSh[ish] = '\0';
+                        break;
+                }
+}
+
+/**
  * _erratoifnc - Converts a string into an integer.
  *
  * @sShll: The string to be transformed.
@@ -13,45 +33,25 @@
 
 int _erratoifnc(char *sShll)
 {
-	int ish = 0;
-	unsigned long int resltShll = 0;
+        int ish;
+        unsigned long int resltShll;
 
-	if (*sShll == '+')
-		sShll++;
-	for (ish = 0;  sShll[ish] != '\0'; ish++)
-	{
-		if (sShll[ish] >= '0' && sShll[ish] <= '9')
-		{
-			resltShll *= 10;
-			resltShll += (sShll[ish] - '0');
-			if (resltShll > INT_MAX)
-				return (-1);
-		}
-		else
-			return (-1);
-	}
-	return (resltShll);
-}
-
-/**
- * priintSh_errrfnc - Outputs an error message.
- *
- * @infShll: The parameter and return infShll struct.
- * @estrrSh: The string containing the specific error type.
- *
- * Return: Returns 0 if the operation is successful,
- * or -1 in the event of an error.
-*/
-
-void priintSh_errrfnc(info_to_structShll *infShll, char *estrrSh)
-{
-	_eputsfnc(infShll->fnameShll);
-	_eputsfnc(": ");
-	printSh_ddfnc(infShll->line_cntShll, STDERR_FILENO);
-	_eputsfnc(": ");
-	_eputsfnc(infShll->argv[0]);
-	_eputsfnc(": ");
-	_eputsfnc(estrrSh);
+	resltShll = 0;
+        if (*sShll == '+')
+                sShll++;
+        for (ish = 0;  sShll[ish] != '\0'; ish++)
+        {
+                if (sShll[ish] >= '0' && sShll[ish] <= '9')
+                {
+                        resltShll *= 10;
+                        resltShll += (sShll[ish] - '0');
+                        if (resltShll > INT_MAX)
+                                return (-1);
+                }
+                else
+                        return (-1);
+        }
+        return (resltShll);
 }
 
 /**
@@ -66,9 +66,10 @@ void priintSh_errrfnc(info_to_structShll *infShll, char *estrrSh)
 int printSh_ddfnc(int inpuuttSh, int fddSh)
 {
 	int (*__putcharsShfnc)(char) = _putcharfnc;
-	int ish, cntSh = 0;
+	int ish, cntSh;
 	unsigned int abs_Shll, currShll;
 
+	cntSh = 0;
 	if (fddSh == STDERR_FILENO)
 		__putcharsShfnc = _eputcharfnc;
 	if (inpuuttSh < 0)
@@ -109,10 +110,12 @@ char *convrt_numbfnc(long int numbSh, int baseeShll, int flgsSh)
 {
 	static char *arrShll;
 	static char buffStr[50];
-	char sgnShll = 0;
+	char sgnShll;
 	char *pointSh_er;
-	unsigned long nssh = numbSh;
+	unsigned long nssh;
 
+	sgnShll = 0;
+	nssh = numbSh;
 	if (!(flgsSh & CNVRT_UNSIGNED) && numbSh < 0)
 	{
 		nssh = -numbSh;
@@ -133,22 +136,22 @@ char *convrt_numbfnc(long int numbSh, int baseeShll, int flgsSh)
 }
 
 /**
- * removeeSh_cmmtsfnc - Replaces the first occurrence of '#' with '\0' in a string.
+ * priintSh_errrfnc - Outputs an error message.
  *
- * @bufferSh: The string to be modified.
+ * @infShll: The parameter and return infShll struct.
+ * @estrrSh: The string containing the specific error type.
  *
- * Return: Always returns 0.
+ * Return: Returns 0 if the operation is successful,
+ * or -1 in the event of an error.
 */
 
-void removeeSh_cmmtsfnc(char *bufferSh)
+void priintSh_errrfnc(info_to_structShll *infShll, char *estrrSh)
 {
-	int ish;
-
-	for (ish = 0; bufferSh[ish] != '\0'; ish++)
-		if (bufferSh[ish] == '#' && (!ish || bufferSh[ish - 1] == ' '))
-		{
-			bufferSh[ish] = '\0';
-			break;
-		}
+        _eputsfnc(infShll->fnameShll);
+        _eputsfnc(": ");
+        printSh_ddfnc(infShll->line_cntShll, STDERR_FILENO);
+        _eputsfnc(": ");
+        _eputsfnc(infShll->argv[0]);
+        _eputsfnc(": ");
+        _eputsfnc(estrrSh);
 }
-

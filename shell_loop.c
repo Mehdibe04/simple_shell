@@ -1,5 +1,6 @@
 #include "shell.h"
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
+
 /**
  * hsh - the main shell program
  * @infShll: the param infShll struct
@@ -10,9 +11,11 @@
 
 int hsh(info_to_structShll *infShll, char **av)
 {
-	ssize_t rsShll = 0;
-	int b8ltinRettSh = 0;
+	ssize_t rsShll;
+	int b8ltinRettSh;
 
+	rsShll = 0;
+	b8ltinRettSh = 0;
 	while (rsShll != -1 && b8ltinRettSh != -2)
 	{
 		clear_info_fnc_shll(infShll);
@@ -45,36 +48,42 @@ int hsh(info_to_structShll *infShll, char **av)
 }
 
 /**
- * findSh_builtinfnc - the function finds the b8ltin cmd
- * @infShll: the param  of the infShll struct
+ * forkSh_comaandfnc - finds an exe thrd to run the commd
+ * @infShll: the param of the infShll structure
  *
- * Return: -1 if not_fnd, 0 (Success),
- * 1 (Failure), -2 in exit case
+ * Return: Nothing
 */
 
-int findSh_builtinfnc(info_to_structShll *infShll)
+void forkSh_comaandfnc(info_to_structShll *infShll)
 {
-	int ish, b8lt_inShll = -1;
-	builtinTblShll b8ltintblShll[] = {
-		{"exit", _myexitfnc},
-		{"env", _myenvfnc},
-		{"help", _myhelpfnc},
-		{"history", _myhistoryfnc},
-		{"setenv", _mysetenvfnc},
-		{"unsetenv", _myShunsetenvfnc},
-		{"cd", _mycdfnc},
-		{"alias", _myaliasfnc},
-		{NULL, NULL}
-	};
+        pid_t chiildPiidShll = fork();
 
-	for (ish = 0; b8ltintblShll[ish].typeShll; ish++)
-		if (_strcmpfnc(infShll->argv[0], b8ltintblShll[ish].typeShll) == 0)
-		{
-			infShll->line_cntShll++;
-			b8lt_inShll = b8ltintblShll[ish].fctShll(infShll);
-			break;
-		}
-	return (b8lt_inShll);
+	if (chiildPiidShll == -1)
+        {
+                perror("Error:");
+                return;
+        }
+        if (chiildPiidShll == 0)
+        {
+                if (execve(infShll->pathShll, infShll->argv
+                                        , getSh_enviironfnc(infShll)) == -1)
+                {
+                        freeSh_iinfofnc(infShll, 1);
+                        if (errno == EACCES)
+                                exit(126);
+                        exit(1);
+                }
+        }
+        else
+        {
+                wait(&(infShll->statuusShll));
+                if (WIFEXITED(infShll->statuusShll))
+                {
+                        infShll->statuusShll = WEXITSTATUS(infShll->statuusShll);
+                        if (infShll->statuusShll == 126)
+                                priintSh_errrfnc(infShll, "Permission denied\n");
+                }
+        }
 }
 
 /**
@@ -122,41 +131,35 @@ void findSh_comanddfnc(info_to_structShll *infShll)
 }
 
 /**
- * forkSh_comaandfnc - finds an exe thrd to run the commd
- * @infShll: the param of the infShll structure
+ * findSh_builtinfnc - the function finds the b8ltin cmd
+ * @infShll: the param  of the infShll struct
  *
- * Return: Nothing
+ * Return: -1 if not_fnd, 0 (Success),
+ * 1 (Failure), -2 in exit case
 */
 
-void forkSh_comaandfnc(info_to_structShll *infShll)
+int findSh_builtinfnc(info_to_structShll *infShll)
 {
-	pid_t chiildPiidShll;
+        int ish = 0, b8lt_inShll;
+        builtinTblShll b8ltintblShll[] = {
+                {"exit", _myexitfnc},
+                {"env", _myenvfnc},
+                {"help", _myhelpfnc},
+                {"history", _myhistoryfnc},
+                {"setenv", _mysetenvfnc},
+                {"unsetenv", _myShunsetenvfnc},
+                {"cd", _mycdfnc},
+                {"alias", _myaliasfnc},
+                {NULL, NULL}
+        };
 
-	chiildPiidShll = fork();
-	if (chiildPiidShll == -1)
-	{
-		perror("Error:");
-		return;
-	}
-	if (chiildPiidShll == 0)
-	{
-		if (execve(infShll->pathShll, infShll->argv
-					, getSh_enviironfnc(infShll)) == -1)
-		{
-			freeSh_iinfofnc(infShll, 1);
-			if (errno == EACCES)
-				exit(126);
-			exit(1);
-		}
-	}
-	else
-	{
-		wait(&(infShll->statuusShll));
-		if (WIFEXITED(infShll->statuusShll))
-		{
-			infShll->statuusShll = WEXITSTATUS(infShll->statuusShll);
-			if (infShll->statuusShll == 126)
-				priintSh_errrfnc(infShll, "Permission denied\n");
-		}
-	}
+	b8lt_inShll = -1;
+        for (; b8ltintblShll[ish].typeShll; ish++)
+                if (_strcmpfnc(infShll->argv[0], b8ltintblShll[ish].typeShll) == 0)
+                {
+                        infShll->line_cntShll++;
+                        b8lt_inShll = b8ltintblShll[ish].fctShll(infShll);
+                        break;
+                }
+        return (b8lt_inShll);
 }

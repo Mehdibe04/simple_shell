@@ -2,6 +2,51 @@
 /* CREATED BY Amina El Hakik, Mehdi Belaazri */
 
 /**
+ * renumbrSh_hstoryfnc - one the change is made,
+ * it renumbs d hstry linked lst
+ * @infShll: Strct that contains potential args.
+ *
+ * Return: hstrycnt (new one)
+ */
+int renumbrSh_hstoryfnc(info_to_structShll *infShll)
+{
+        list_tShll *nodeeShll;
+        int ish;
+
+	ish = 0;
+	nodeeShll = infShll->histShll;
+        while (nodeeShll)
+        {
+                nodeeShll->numShll = ish++;
+                nodeeShll = nodeeShll->nextShll;
+        }
+        return (infShll->historycountSh = ish);
+}
+
+/**
+ * buildSh_hstory_lstfnc - Appends an entry to a hstry linked lst.
+ * @infShll: The structure that contains potential args.
+ * @bufferSh: The buffer.
+ * @linecntSh: The history line count (hstrycount).
+ *
+ * Return: 0 (Success)
+*/
+
+int buiildSh_hstory_lstfnc(info_to_structShll *infShll
+                , char *bufferSh, int linecntSh)
+{
+        list_tShll *nodeeShll = NULL;
+
+        if (infShll->histShll)
+                nodeeShll = infShll->histShll;
+        addiingnodSh_end(&nodeeShll, bufferSh, linecntSh);
+
+        if (!infShll->histShll)
+                infShll->histShll = nodeeShll;
+        return (0);
+}
+
+/**
  * get_hstry_fnc - Retrieves the history file.
  * @infShll: The param struct.
  *
@@ -10,9 +55,8 @@
 
 char *get_hstry_fnc(info_to_structShll *infShll)
 {
-	char *bufferSh, *dirrSh;
+	char *bufferSh, *dirrSh = _getenvfnc(infShll, "HOME=");
 
-	dirrSh = _getenvfnc(infShll, "HOME=");
 	if (!dirrSh)
 		return (NULL);
 	bufferSh = malloc(
@@ -28,37 +72,6 @@ char *get_hstry_fnc(info_to_structShll *infShll)
 }
 
 /**
- * wriite_hstoryfnc - appnds to an existg file or create an new file
- * @infShll: the param strct
- *
- * Return: 1 (Success), -1 Otherwise
-*/
-
-int wriite_hstoryfnc(info_to_structShll *infShll)
-{
-	ssize_t fddSh;
-	char *fnameShll = get_hstry_fnc(infShll);
-	list_tShll *nodeeShll = NULL;
-
-	if (!fnameShll)
-		return (-1);
-
-	fddSh = open(fnameShll, O_CREAT | O_TRUNC | O_RDWR, 0644);
-	free(fnameShll);
-	if (fddSh == -1)
-		return (-1);
-	for (nodeeShll = infShll->histShll; nodeeShll
-			; nodeeShll = nodeeShll->nextShll)
-	{
-		_putsfncfdfnc(nodeeShll->stringShll, fddSh);
-		_putfdfnc('\n', fddSh);
-	}
-	_putfdfnc(BUFFER_FLSH, fddSh);
-	close(fddSh);
-	return (1);
-}
-
-/**
  * readSh_hstoryfnc - Reads historical data from a file.
  * @infShll: The parameter structure.
  *
@@ -68,11 +81,15 @@ int wriite_hstoryfnc(info_to_structShll *infShll)
 
 int readSh_hstoryfnc(info_to_structShll *infShll)
 {
-	int ish, lasttSh = 0, linecntSh = 0;
-	ssize_t fddSh, rdleenShll, fsizzeSh = 0;
+	int ish, lasttSh, linecntSh;
+	ssize_t fddSh, rdleenShll, fsizzeSh;
 	struct stat st;
-	char *bufferSh = NULL, *fnameShll = get_hstry_fnc(infShll);
+	char *bufferSh = NULL, *fnameShll;
 
+	lasttSh = 0;
+	linecntSh = 0;
+	fsizzeSh = 0;
+	fnameShll = get_hstry_fnc(infShll);
 	if (!fnameShll)
 		return (0);
 
@@ -110,44 +127,33 @@ int readSh_hstoryfnc(info_to_structShll *infShll)
 }
 
 /**
- * buildSh_hstory_lstfnc - Appends an entry to a hstry linked lst.
- * @infShll: The structure that contains potential args.
- * @bufferSh: The buffer.
- * @linecntSh: The history line count (hstrycount).
+ * wriite_hstoryfnc - appnds to an existg file or create an new file
+ * @infShll: the param strct
  *
- * Return: 0 (Success)
+ * Return: 1 (Success), -1 Otherwise
 */
 
-int buiildSh_hstory_lstfnc(info_to_structShll *infShll
-		, char *bufferSh, int linecntSh)
+int wriite_hstoryfnc(info_to_structShll *infShll)
 {
-	list_tShll *nodeeShll = NULL;
+        ssize_t fddSh;
+        char *fnameShll;
+        list_tShll *nodeeShll = NULL;
 
-	if (infShll->histShll)
-		nodeeShll = infShll->histShll;
-	addiingnodSh_end(&nodeeShll, bufferSh, linecntSh);
+	fnameShll = get_hstry_fnc(infShll);
+        if (!fnameShll)
+                return (-1);
 
-	if (!infShll->histShll)
-		infShll->histShll = nodeeShll;
-	return (0);
-}
-
-/**
- * renumbrSh_hstoryfnc - one the change is made,
- * it renumbs d hstry linked lst
- * @infShll: Strct that contains potential args.
- *
- * Return: hstrycnt (new one)
- */
-int renumbrSh_hstoryfnc(info_to_structShll *infShll)
-{
-	list_tShll *nodeeShll = infShll->histShll;
-	int ish = 0;
-
-	while (nodeeShll)
-	{
-		nodeeShll->numShll = ish++;
-		nodeeShll = nodeeShll->nextShll;
-	}
-	return (infShll->historycountSh = ish);
+        fddSh = open(fnameShll, O_CREAT | O_TRUNC | O_RDWR, 0644);
+        free(fnameShll);
+        if (fddSh == -1)
+                return (-1);
+        for (nodeeShll = infShll->histShll; nodeeShll
+                        ; nodeeShll = nodeeShll->nextShll)
+        {
+                _putsfncfdfnc(nodeeShll->stringShll, fddSh);
+                _putfdfnc('\n', fddSh);
+        }
+        _putfdfnc(BUFFER_FLSH, fddSh);
+        close(fddSh);
+        return (1);
 }
